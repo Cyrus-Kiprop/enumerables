@@ -22,6 +22,20 @@ module Enumerable
     result
   end
 
+  def my_all?()
+    my_each do |element|
+      ret = yield(element)
+      # puts ret
+      if ret == false
+        return false
+        break
+      else
+        next
+      end
+    end
+    true
+  end
+
   
 end
 
