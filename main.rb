@@ -13,6 +13,16 @@ module Enumerable
     end
   end
 
+  def my_select()
+    result = []
+    my_each do |item|
+      ret = yield(item) if block_given?
+      result << item if ret
+    end
+    result
+  end
+
+  
 end
 
 # # my_each in action with passed block
