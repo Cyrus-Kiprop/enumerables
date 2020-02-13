@@ -7,6 +7,11 @@ module Enumerable
     end
   end
 
+  def my_each_with_index()
+    (0..(size - 1)).each do |i|
+      puts yield(self[i], i) if block_given?
+    end
+  end
 
 end
 
