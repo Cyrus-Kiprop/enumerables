@@ -36,7 +36,29 @@ module Enumerable
     true
   end
 
-  
+  def my_any?(args)
+    result = nil
+    my_each do |element|
+      if args
+
+        reg_result = args.call(element)
+
+        if reg_result != nil
+          result = true
+          break
+        end
+      else
+        ret = yield(element) if block_given?
+        if ret == true
+          result = true
+          break
+        end
+      end
+    end
+    return false if result == nil
+
+    result
+  end
 end
 
 # # my_each in action with passed block
