@@ -1,4 +1,5 @@
-# ruby standard enumerable class
+# rubocop: disable Metrics/CyclomaticComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/PerceivedComplexity
+
 module Enumerable
   def my_each
     return enum_for(:my_each) unless block_given?
@@ -157,6 +158,7 @@ module Enumerable
     acc
   end
 end
+# rubocop: enable Metrics/CyclomaticComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/PerceivedComplexity
 
 # # my_each in action
 # [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5].my_each_with_index { |even, idx|
