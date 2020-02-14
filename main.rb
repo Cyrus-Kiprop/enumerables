@@ -56,7 +56,35 @@ module Enumerable
     true
   end
 
-  
+  def my_any?(*args)
+    if block_given?
+      to_a.my_each do |item|
+        return true if yield item
+      end
+    elsif args&.length&.positive? and to_a.length.positive?
+      if args[0].class == Regexp
+        to_a.my_each do |item|
+          return true if item.to_s =~ args[0]
+        end
+      elsif args[0].class == Class
+        to_a.my_each do |item|
+          return true if item.is_a?args[0]
+        end
+      else
+        to_a.my_each do |item|
+          return true if item == args[0]
+        end
+      end
+    else
+      to_a.my_each do |item|
+        return true if item
+      end
+    end
+    false
+  end
+
+ 
+
 
 end
 
