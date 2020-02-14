@@ -1,86 +1,65 @@
 # ruby standard enumerable class
-
 module Enumerable
-  def my_each()
-    (0..(size - 1)).each do |i|
-      yield(self[i]) if block_given?
-    end
-  end
+  
 
-  def my_each_with_index()
-    (0..(size - 1)).each do |i|
-      puts yield(self[i], i) if block_given?
-    end
-  end
-
-  def my_select()
-    result = []
-    my_each do |item|
-      ret = yield(item) if block_given?
-      result << item if ret
-    end
-    result
-  end
-
-  def my_all?()
-    my_each do |element|
-      ret = yield(element)
-      # puts ret
-      if ret == false
-        return false
-        break
-      else
-        next
+  def my_count(*args)
+    counter = 0
+    if block_given? 
+      to_a.my_each do |item|
+        counter += 1 if yield item
       end
+    elsif args.length.positive? and to_a.length.positive?
+        to_a.my_each do |item|
+          counter += 1 if item == args[0]
+        end
+    elsif args.join().empty? and !block_given?
+        return to_a.size
     end
-    true
+    counter
   end
 
-  def my_any?(args)
-    result = nil
-    my_each do |element|
-      if args
 
-        reg_result = args.call(element)
 
-        if reg_result != nil
-          result = true
-          break
-        end
-      else
-        ret = yield(element) if block_given?
-        if ret == true
-          result = true
-          break
-        end
-      end
-    end
-    return false if result == nil
 
-    result
-  end
 end
 
-# # my_each in action with passed block
-#   %w[water ant bear].my_each do |item|
-#   item.upcase
-# end
-
-# # my_each_with_index in action
-# %w[water ant bear].my_each_with_index do |item, indx|
-#   puts item
-#   puts indx
-# end
+# # my_each in action
+# [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5].my_each_with_index { |even, idx|
+#   puts idx * even
+# }
 
 # # my_select in action
-# print (%w[water ant bear].my_select do |item|
-#   item.length == 3
-# end)
+# p [1, 2, 3, 4, 5].my_select(&:even?) #=> [2, 4]
+# p (1..10).my_select { |i| i % 3 == 0 } #=> [3, 6, 9]
+# p %i[foo bar].my_select { |x| x == :foo } #=> [:foo]
 
-# # my_all in action
-#  puts (%w[water ant bear].my_all? do |item|
-#   item.length >= 3
-# end)
+# my_all in action
+# p %w[ant bear cat].my_all? { |word| word.length >= 3 } #=> true
+# p %w[ant bear cat].my_all? { |word| word.length >= 4 } #=> false
+# p %w[ant bear cat].my_all?(/\w/)                       #=> false
+# p [1, 2i, 3.14].my_all?(Numeric)                       #=> true
+# p [nil, true, 99].my_all?                              #=> false
+# p [].my_all?                                           #=> true
 
-# puts %w[ant bear cat].my_any?
-%w[ant bear cat].my_any?(/d/)
+# my_any? in action
+# p %w[ant bear cat].my_any? { |word| word.length >= 3 } #=> true
+# p %w[ant bear cat].my_any? { |word| word.length >= 4 } #=> true
+# p %w[ant bear cat].my_any?(/d/)                        #=> false
+# p [nil, true, 99].my_any?                              #=> true
+# p [].any?                                              #=> false
+
+# my_none? in action
+# p %w{ant bear cat}.none? { |word| word.length == 5 } #=> true
+# p %w{ant bear cat}.none? { |word| word.length >= 4 } #=> false
+# p %w{ant bear cat}.none?(/d/)                        #=> true
+# p [1, 3.14, 42].none?(Float)                         #=> false
+# p [].none?                                           #=> true
+# p [nil].none?                                        #=> true
+# p [nil, false].none?                                 #=> true
+# p [nil, false, true].none?                           #=> false
+
+# my_count in action
+ ary = [1, 2, 4, 2]
+p ary.my_count               #=> 4
+p ary.my_count(2)            #=> 2
+p ary.my_count(2) { |x| x%2==0 } #=> 3
