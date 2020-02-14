@@ -18,7 +18,19 @@ module Enumerable
     to_a
   end
 
-  
+  def my_select
+    return enum_for(:my_each) unless block_given?
+
+    result = []
+    0.upto(to_a.size - 1) do |k|
+      ret = yield to_a[k]
+      result << to_a[k] if ret == true
+    end
+    result
+  end
+
+ 
+
 
 end
 
