@@ -29,8 +29,34 @@ module Enumerable
     result
   end
 
- 
+  def my_all?(*args)
+    if block_given?
+      to_a.my_each do |item|
+        return false unless yield item
+      end
+    elsif args&.length&.positive? and to_a.length.positive?
+      if args[0].class == Regexp
+        to_a.my_each do |item|
+          return false unless item.to_s =~ args[0]
+        end
+      elsif args[0].class == Class
+        to_a.my_each do |item|
+          return false unless item.is_a?args[0]
+        end
+      else
+        to_a.my_each do |item|
+          return false unless item == args[0]
+        end
+      end
+    else
+      to_a.my_each do |item|
+        return false unless item
+      end
+    end
+    true
+  end
 
+  
 
 end
 
