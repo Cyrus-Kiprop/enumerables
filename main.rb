@@ -110,10 +110,21 @@ module Enumerable
     false
   end
 
-  
-  
-
-
+  def my_count(*args)
+    counter = 0
+    if block_given?
+      to_a.my_each do |item|
+        counter += 1 if yield item
+      end
+    elsif args.length.positive? and to_a.length.positive?
+      to_a.my_each do |item|
+        counter += 1 if item == args[0]
+      end
+    elsif args.join.empty? and !block_given?
+      return to_a.size
+    end
+    counter
+  end
 end
 
 # # my_each in action
@@ -152,7 +163,7 @@ end
 # p [nil, false, true].none?                           #=> false
 
 # my_count in action
- ary = [1, 2, 4, 2]
-p ary.my_count               #=> 4
-p ary.my_count(2)            #=> 2
-p ary.my_count(2) { |x| x%2==0 } #=> 3
+ary = [1, 2, 4, 2]
+p ary.my_count #=> 4
+p ary.my_count(2) #=> 2
+p ary.my_count(2, &:even?) #=> 3
