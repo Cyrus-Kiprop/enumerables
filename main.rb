@@ -1,25 +1,24 @@
 # ruby standard enumerable class
 module Enumerable
-  
+  def my_each
+    return enum_for(:my_each) unless block_given?
 
-  def my_count(*args)
-    counter = 0
-    if block_given? 
-      to_a.my_each do |item|
-        counter += 1 if yield item
-      end
-    elsif args.length.positive? and to_a.length.positive?
-        to_a.my_each do |item|
-          counter += 1 if item == args[0]
-        end
-    elsif args.join().empty? and !block_given?
-        return to_a.size
+    0.upto(to_a.size - 1) do |k|
+      yield to_a[k]
     end
-    counter
+    to_a
   end
 
+  def my_each_with_index
+    return enum_for(:my_each) unless block_given?
 
+    0.upto(to_a.size - 1) do |k|
+      yield to_a[k], k
+    end
+    to_a
+  end
 
+  
 
 end
 
