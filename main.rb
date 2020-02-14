@@ -135,7 +135,6 @@ module Enumerable
   end
 
   def my_inject(*args)
-    result = []
     acc = args[0].class == Integer ? args[0] : to_a[0]
 
     if block_given? and args.join.empty?
@@ -154,9 +153,7 @@ module Enumerable
         #  acc = acc.send(args[1].to_s, item)
         acc = args[1].to_proc.call(acc, item)
       end
-
-        end
-
+    end
     acc
   end
 end
@@ -208,15 +205,14 @@ end
 # p (1..4).my_map
 
 # my_inject in action
-p %w[ant dog cat bird].my_inject { |sum, n| sum + n }
-p (1..6).my_inject(1) { |sum, n| sum * n }
-p (1..6).my_inject(0) { |sum, n| sum + n }
-p (1..6).my_inject(0, :+)
-p (5..10).my_inject(1, :*)
-p (5..10).reduce(1, :*)
+# p %w[ant dog cat bird].my_inject { |sum, n| sum + n }
+# p (1..6).my_inject(1) { |sum, n| sum * n }
+# p (1..6).my_inject(0) { |sum, n| sum + n }
+# p (1..6).my_inject(0, :+)
+# p (5..10).my_inject(1, :*)
+# p (5..10).reduce(1, :*)
 
-
-e =  %w[cat sheep bear].my_inject do |acc, word|
-  acc.length > word.length ? acc : word
-end
-p e
+# e =  %w[cat sheep bear].my_inject do |acc, word|
+#   acc.length > word.length ? acc : word
+# end
+# p e
