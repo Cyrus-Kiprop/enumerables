@@ -125,6 +125,16 @@ module Enumerable
     end
     counter
   end
+
+  def my_map
+    return to_a.enum_for(:my_map) unless block_given?
+
+    result = []
+    to_a.my_each { |item| result << yield(item) }
+    result
+  end
+
+  
 end
 
 # # my_each in action
@@ -163,7 +173,12 @@ end
 # p [nil, false, true].none?                           #=> false
 
 # my_count in action
-ary = [1, 2, 4, 2]
-p ary.my_count #=> 4
-p ary.my_count(2) #=> 2
-p ary.my_count(2, &:even?) #=> 3
+# ary = [1, 2, 4, 2]
+# p ary.my_count #=> 4
+# p ary.my_count(2) #=> 2
+# p ary.my_count(2, &:even?) #=> 3
+
+# my_map in action
+# p (1..4).my_map { |i| i*i }      #=> [1, 4, 9, 16]
+# p (1..4).my_map { "cat"  }   #=> ["cat", "cat", "cat", "cat"]
+p (1..4).my_map
