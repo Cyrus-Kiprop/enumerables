@@ -134,7 +134,31 @@ module Enumerable
     result
   end
 
-  
+  def my_inject(*args)
+    result = []
+    acc = args[0].class == Integer ? args[0] : to_a[0]
+
+    if block_given? and args.join.empty?
+      to_a.my_each do |item|
+        acc = yield(acc, item)
+      end
+
+    elsif block_given? || args[0].class == Integer and args.length == 1
+      to_a.my_each do |item|
+        acc = yield(acc, item)
+      end
+
+    elsif args.length == 2 and args[0].class == Integer
+      acc = args[0]
+      to_a.my_each do |item|
+        #  acc = acc.send(args[1].to_s, item)
+        acc = args[1].to_proc.call(acc, item)
+      end
+
+        end
+
+    acc
+  end
 end
 
 # # my_each in action
@@ -160,7 +184,7 @@ end
 # p %w[ant bear cat].my_any? { |word| word.length >= 4 } #=> true
 # p %w[ant bear cat].my_any?(/d/)                        #=> false
 # p [nil, true, 99].my_any?                              #=> true
-# p [].any?                                              #=> false
+# p [].any?                                           elsif args   #=> false
 
 # my_none? in action
 # p %w{ant bear cat}.none? { |word| word.length == 5 } #=> true
@@ -181,4 +205,18 @@ end
 # my_map in action
 # p (1..4).my_map { |i| i*i }      #=> [1, 4, 9, 16]
 # p (1..4).my_map { "cat"  }   #=> ["cat", "cat", "cat", "cat"]
-p (1..4).my_map
+# p (1..4).my_map
+
+# my_inject in action
+p %w[ant dog cat bird].my_inject { |sum, n| sum + n }
+p (1..6).my_inject(1) { |sum, n| sum * n }
+p (1..6).my_inject(0) { |sum, n| sum + n }
+p (1..6).my_inject(0, :+)
+p (5..10).my_inject(1, :*)
+p (5..10).reduce(1, :*)
+
+
+e =  %w[cat sheep bear].my_inject do |acc, word|
+  acc.length > word.length ? acc : word
+end
+p e
