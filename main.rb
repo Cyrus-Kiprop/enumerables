@@ -87,33 +87,38 @@ module Enumerable
   def my_none?(*args)
     if block_given?
       to_a.my_each do |item|
-        return true unless yield item
+        return false unless yield item
       end
     elsif args&.length&.positive? and to_a.length.positive?
       if args[0].class == Regexp
         to_a.my_each do |item|
-          return true unless item.to_s =~ args[0]
+          return false unless item.to_s =~ args[0]
         end
       elsif args[0].class == Class
         to_a.my_each do |item|
-          return true unless item.is_a?args[0]
+          return false unless item.is_a?args[0]
         end
       else
         to_a.my_each do |item|
-          return true unless item == args[0]
+          return false unless item == args[0]
         end
       end
     else
       to_a.my_each do |item|
-        return true unless item
+        return false unless item
       end
     end
-    false
+    true
   end
 
   def my_count(*args)
     counter = 0
-    if block_given?
+    if !args.empty? && block_given?
+      puts '(repl):xx: warning: given block not used'
+      to_a.my_each do |item|
+        counter += 1 if item == args[0]
+      end
+    elsif block_given?
       to_a.my_each do |item|
         counter += 1 if yield item
       end
@@ -196,10 +201,11 @@ end
 # p [nil, false, true].none?                           #=> false
 
 # my_count in action
-# ary = [1, 2, 4, 2]
-# p ary.my_count #=> 4
-# p ary.my_count(2) #=> 2
-# p ary.my_count(2, &:even?) #=> 3
+ary = [1, 2, 4, 2]
+p ary.my_count #=> 4
+p ary.my_count(2) #=> 2
+p ary.my_count(2, &:even?) #=> 2 #Plus the blck not used error
+
 
 # my_map in action
 # p (1..4).my_map { |i| i*i }      #=> [1, 4, 9, 16]
