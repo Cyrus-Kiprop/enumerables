@@ -143,8 +143,8 @@ module Enumerable
   def my_inject(*args)
     acc = args[0].class == Integer ? args[0] : to_a[0]
     if block_given? and args.join.empty?
-      1.upto(to_a.size - 1) do |item|
-        acc = yield(acc, to_a[item])
+      to_a[1..-1].my_each do |item|
+        acc = yield(acc, item)
       end
 
     elsif args[0].class == Integer || args.length == 1 and block_given?
@@ -153,8 +153,8 @@ module Enumerable
       end
 
     elsif !block_given? and args[0].class == Symbol
-      1.upto(to_a.size - 1) do |item|
-        acc = args[0].to_proc.call(acc, to_a[item])
+      to_a[1..-1].my_each do |item|
+        acc = args[0].to_proc.call(acc, item)
       end
 
     elsif args.length == 2 and args[0].class == Integer
