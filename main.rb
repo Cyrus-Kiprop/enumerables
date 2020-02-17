@@ -199,13 +199,12 @@ end
 # p [nil].none?                                        #=> true
 # p [nil, false].none?                                 #=> true
 # p [nil, false, true].none?                           #=> false
-
+#
 # my_count in action
-ary = [1, 2, 4, 2]
-p ary.my_count #=> 4
-p ary.my_count(2) #=> 2
-p ary.my_count(2, &:even?) #=> 2 #Plus the blck not used error
-
+# ary = [1, 2, 4, 2]
+# p ary.my_count #=> 4
+# p ary.my_count(2) #=> 2
+# p ary.my_count(2, &:even?) #=> 2 #Plus the blck not used error
 
 # my_map in action
 # p (1..4).my_map { |i| i*i }      #=> [1, 4, 9, 16]
